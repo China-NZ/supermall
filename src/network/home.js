@@ -9,3 +9,13 @@ export function getHomeMultidata(){
     url:'/home/multidata'
   })
 }
+
+export function getHomeGoods(type,page){
+  return request1({
+    url: '/home/recommendview',
+    params:{
+      type,
+      page
+    }
+  })
+}
