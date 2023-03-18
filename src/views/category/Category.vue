@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div class="wrapper">
-      <ul class="content">
+    <!-- <div class="wrapper" ref="abc">
+    </div> -->
+    <b-scroll class="content" :probeType="2" :pullUpLoad = 'true' @pullingUp='contentPullIngUp'>
+      <template #wrapper>
+        <ul class="content">
+        <button @click="btnClick">按钮</button>
       <li>分类列表1</li>
       <li>分类列表2</li>
       <li>分类列表3</li>
@@ -102,31 +106,59 @@
       <li>分类列表98</li>
       <li>分类列表99</li>
       <li>分类列表100</li>
-    </ul>
-    </div>
+        </ul>
+      </template>
+    </b-scroll>
   </div>
 </template>
 <script>
+
 // 实验引入，正式把插件封装一层，引入封装好的函数，更安全
-import BScroll from '@better-scroll/core'
+/* import BScroll from '@better-scroll/core'
+import Pullup from '@better-scroll/pull-up'
+BScroll.use(Pullup) */
+
+// 引入封装好的组件
+import BScroll from 'components/common/bscroll/BScroll'
+
 export default {
+  components: { 
+    BScroll,
+  },
   name: 'Category',
   data() {
     return {
       scroll:null
     }
   },
-  created() {
-  },
-  mounted() {
-    console.log(document.querySelector('.wrapper'))
+  /* mounted() {
+    // console.log(this.$refs.abc);
+    // console.log(document.querySelector('.wrapper'))
     this.scroll = new BScroll('.wrapper',{
-      
+      probeType:2,
+      pullUpLoad:true,
+      // 鼠标点击按钮监听 默认是true 不需要设置，但是设置为false好像也不起效果
+      // click:false
     })
+    this.scroll.on('scroll',(position=>{
+      console.log(position);
+    }))
+    this.scroll.on('pullingUp',()=>{
+      console.log('上拉加载更多');
+    })
+  }, */
+  methods: {
+    btnClick(){
+      console.log('btnClick');
+    },
+    // 上拉加载数据
+    contentPullIngUp(){
+      console.log('上拉加载');
+    }
   },
 };
 </script>
-<style>
+<style scoped>
 .wrapper{
   height: 200px;
   background-color: pink;

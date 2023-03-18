@@ -57,7 +57,7 @@
     },
   };
 </script>
-<style>
+<style scoped>
 .tabar-item{
   flex: 1;
   text-align: center;

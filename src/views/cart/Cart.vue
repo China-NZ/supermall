@@ -8,5 +8,5 @@ export default {
   name: 'Cart',
 };
 </script>
-<style>
+<style scoped>
 </style>

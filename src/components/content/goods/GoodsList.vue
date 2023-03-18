@@ -22,7 +22,7 @@ import GoodsListItem from 'components/content/goods/GoodsListItem'
     }
   };
 </script>
-<style>
+<style scoped>
 .goods-list {
     display: flex;
     width: 100%;

@@ -10,7 +10,7 @@
   };
 </script>
 
-<style>
+<style scoped>
 .tabar{
   position: fixed;
   bottom: 0;

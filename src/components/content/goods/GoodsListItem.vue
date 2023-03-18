@@ -22,7 +22,7 @@
     }
   };
 </script>
-<style>
+<style scoped>
 .goods-list-item {
     position: relative;
     padding-bottom: 40px;

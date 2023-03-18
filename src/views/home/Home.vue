@@ -1,77 +1,51 @@
 <template>
   <div id="home">
-    <router-view />
+    <!-- <router-view /> -->
     <nav-bar class="home-nav">
       <template v-slot:center>
         <div>购物街</div>
       </template>
     </nav-bar>
-    <home-swiper :banner="banner"/>
-    <recommend-view :recommend="recommend"/>
-    <feature-view/>
-    <!-- v-on:tabClick => TabControl文件里面返回的数据 -->
-    <tab-control class="tab-control" :tabcontrol="tabcontrol"
-    @tabClick="tabClick"/>
-    <!-- 不能写死，要不然商品栏哪里，不管怎么点击都是这个数据 -->
-    <!-- <goods-list :goodlist="goods['pop'].list"/> -->
-    <goods-list :goodlist="showGoods"/>
-    <ul>
-      <li>列表1</li>
-      <li>列表2</li>
-      <li>列表3</li>
-      <li>列表4</li>
-      <li>列表5</li>
-      <li>列表6</li>
-      <li>列表7</li>
-      <li>列表8</li>
-      <li>列表9</li>
-      <li>列表10</li>
-      <li>列表1</li>
-      <li>列表2</li>
-      <li>列表3</li>
-      <li>列表4</li>
-      <li>列表5</li>
-      <li>列表6</li>
-      <li>列表7</li>
-      <li>列表8</li>
-      <li>列表9</li>
-      <li>列表10</li>
-      <li>列表1</li>
-      <li>列表2</li>
-      <li>列表3</li>
-      <li>列表4</li>
-      <li>列表5</li>
-      <li>列表6</li>
-      <li>列表7</li>
-      <li>列表8</li>
-      <li>列表9</li>
-      <li>列表10</li>
-      <li>列表1</li>
-      <li>列表2</li>
-      <li>列表3</li>
-      <li>列表4</li>
-      <li>列表5</li>
-      <li>列表6</li>
-      <li>列表7</li>
-      <li>列表8</li>
-      <li>列表9</li>
-      <li>列表10</li>
-    </ul>
+    <!-- :probeType 是否开启监听鼠标移动位置 默认不监听 -->
+    <b-scroll
+      class="content"
+      ref="bscroll"
+      :probeType="3"
+      @scroll="contentScroll"
+      :pullUpLoad="true"
+      @pullingUp="contentPullIngUp"
+    >
+      <template #wrapper>
+        <home-swiper :banner="banner" />
+        <recommend-view :recommend="recommend" />
+        <feature-view />
+        <!-- v-on:tabClick => TabControl文件里面返回的数据 -->
+        <tab-control
+          class="tab-control"
+          :tabcontrol="tabcontrol"
+          @tabClick="tabClick"
+        />
+        <!-- 不能写死，要不然商品栏哪里，不管怎么点击都是这个数据 -->
+        <!-- <goods-list :goodlist="goods['pop'].list"/> -->
+        <goods-list :goodlist="showGoods" />
+      </template>
+    </b-scroll>
+    <back-top @click.native="backClick" v-show="isShow" />
   </div>
 </template>
 <script>
 // 公用组件
-import NavBar from "components/common/navbar/NavBar"
-import TabControl from 'components/content/tabControl/TabControl'
-import GoodsList from 'components/content/goods/GoodsList'
-
+import NavBar from "components/common/navbar/NavBar";
+import TabControl from "components/content/tabControl/TabControl";
+import GoodsList from "components/content/goods/GoodsList";
+import BScroll from "components/common/bscroll/BScroll";
+import BackTop from "components/content/backTop/BackTop";
 // 页面组件
-import HomeSwiper from './childComps/HomeSwiper'
-import RecommendView from './childComps/RecommendView'
-import FeatureView from './childComps/FeatureView'
+import HomeSwiper from "./childComps/HomeSwiper";
+import RecommendView from "./childComps/RecommendView";
+import FeatureView from "./childComps/FeatureView";
 // 导入的函数方法
-import { getHomeMultidata,getHomeGoods } from "network/home"
-
+import { getHomeMultidata, getHomeGoods } from "network/home";
 
 export default {
   name: "Home",
@@ -80,78 +54,101 @@ export default {
       banner: [],
       recommend: [],
       //粘性定位哪里的数据，这个由使用者自行录入或者请求接口获取到
-      tabcontrol:['流行','新款','精选'],
+      tabcontrol: ["流行", "新款", "精选"],
       //选项卡下的数据，从接口获取数据,因为数据结构复杂，使用对象包裹对象
-      goods:{
+      goods: {
         // pop对应流行下的数据，page页码，list每页的具体数据 下面一一对应上面的
-        'pop':{page:0,list:[]},
-        'news':{page:0,list:[]},
-        'sell':{page:0,list:[]},
+        pop: { page: 0, list: [] },
+        news: { page: 0, list: [] },
+        sell: { page: 0, list: [] },
       },
-      currentType:'pop',
+      currentType: "pop",
+      isShow: false,
     };
   },
   components: {
     NavBar,
     TabControl,
     GoodsList,
+    BScroll,
     HomeSwiper,
     RecommendView,
     FeatureView,
-
+    BackTop,
   },
   // 网络请求获取的数据 生命周期
   created() {
     // 1.请求多个数据
-    this.getHomeMultidata()
+    this.getHomeMultidata();
     // 2.请求商品数据
-    this.getHomeGoods('pop')
-    this.getHomeGoods('news')
-    this.getHomeGoods('sell')
+    this.getHomeGoods("pop");
+    this.getHomeGoods("news");
+    this.getHomeGoods("sell");
   },
-  computed:{
-    showGoods(){
-      return this.goods[this.currentType].list
-    }
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list;
+    },
   },
   methods: {
     // 封装一层网络请求接口的数据
-    getHomeMultidata(){
+    getHomeMultidata() {
       getHomeMultidata().then((result) => {
-      this.banner = result.data.banner.list;
-      this.recommend = result.data.recommend.list;
-      })
+        this.banner = result.data.banner.list;
+        this.recommend = result.data.recommend.list;
+      });
     },
     // 商品接口数据 接口有问题，看操作逻辑，数据无法展示
-    getHomeGoods(type){
+    getHomeGoods(type) {
       // 需要动态的获取请求那个页面的数据，页码数
-      const page=this.goods[type].page+1 // 页码数
-      getHomeGoods(type,page).then(result=>{
-        this.goods[type].list.push(...result.data.list)
-        this.goods[type].page +=1
-      })
+      const page = this.goods[type].page + 1; // 页码数
+      getHomeGoods(type, page).then((result) => {
+        this.goods[type].list.push(...result.data.list);
+        this.goods[type].page += 1;
+        // 调用方法，使其上拉加载数据，可以重复使用
+        this.$refs.bscroll.finishPullUp();
+      });
     },
     // 事件监听相关的方法 子组件传入到父组件的数据接收
-    tabClick(index){
+    tabClick(index) {
       switch (index) {
         case 0:
-          this.currentType='pop'
-          break
+          this.currentType = "pop";
+          break;
         case 1:
-          this.currentType='news'
-          break
+          this.currentType = "news";
+          break;
         case 2:
-          this.currentType='sell'
-          break
+          this.currentType = "sell";
+          break;
       }
       console.log(this.currentType);
+    },
+    backClick() {
+      console.log(this.$refs.bscroll);
+      // scrollTo(X坐标,y坐标,等待时间)
+      // this.$refs.bscroll.scroll.scrollTo(0,0,1000)
+      this.$refs.bscroll.scrollTo(0, 0);
+    },
+    //从BScroll组件中传递过来的坐标
+    contentScroll(position) {
+      // console.log(position);
+      this.isShow = -position.y > 1000;
+    },
+    // 上拉加载数据
+    contentPullIngUp() {
+      console.log('上拉加载');
+      this.getHomeGoods(this.currentType);
     },
   },
 };
 </script>
-<style>
-#home{
+<style scoped>
+#home {
+  position: relative;
   padding-top: 44px;
+  /* 视口标签 */
+  height: 100vh;
 }
 .home-nav {
   color: #fff;
@@ -164,9 +161,23 @@ export default {
   top: 0;
   z-index: 1;
 }
-.tab-control{
-  position:sticky;
+.tab-control {
+  position: sticky;
   top: 44px;
   z-index: 1;
 }
+.content {
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+/* .content {
+  height: calc(100%-93px);
+  background-color: red;
+  overflow: hidden;
+  margin-top: 44px;
+} */
 </style>

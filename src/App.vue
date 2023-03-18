@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="wrapper">
     <router-view/>
     <main-tab-bar/>
   </div>
@@ -15,7 +15,6 @@ export default {
   }
 }
 </script>
-
-<style>
+<style scoped>
 @import "assets/css/base.css"
 </style>
