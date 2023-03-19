@@ -43,31 +43,44 @@ export default {
       pullUpLoad: this.pullUpLoad,
       // 使其他链接标签，能够被点击跳转
       click: true,
+      /* observeDOM:true,
+      observeDOMImage:true */
     });
+    console.log(this.scroll);
     // 监听滚动的位置
-    this.scroll.on("scroll", (position) => {
-      // console.log(position);
-      // 自定义事件，传递给那些主组件里面去
-      this.$emit("scroll", position);
-    });
-    // 监听上拉事件
-    this.scroll.on("pullingUp", () => {
-      // console.log("下拉加载更多");
-      // 自定义事件，传递给其他组件
-      this.$emit("pullingUp");
-    });
+    if (this.probeType === 2 || this.probeType === 3) {// 加入判断，让程序更加严谨
+      this.scroll.on("scroll", (position) => {
+        // console.log(position);
+        // 自定义事件，传递给那些主组件里面去
+        this.$emit("scroll", position);
+      });
+    }
+    // 监听上拉事件 scroll滚动到底部
+    if (this.pullUpLoad) {// 加入判断，让程序更加严谨
+      this.scroll.on("pullingUp", () => {
+        // console.log("下拉加载更多");
+        // 自定义事件，传递给其他组件
+        this.$emit("pullingUp");
+      });
+    }
   },
   methods: {
     scrollTo(x, y, time = 500) {
-      this.scroll.scrollTo(x, y, time);
+      // 判断严谨 启用逻辑与 &&
+      this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x, y, time);
     },
     // 封装方法
     finishPullUp() {
       // 设置定时器，规定多久可以进行一次上拉加载
       setTimeout(() => {
         // 提供下一次上拉加载
-        this.scroll.finishPullUp();
+        this.scroll && this.scroll.finishPullUp();
       }, 2000);
+    },
+    // 调用 refresh() 来重新计算高度
+    refresh() {
+      console.log("-----");
+      this.scroll && this.scroll.refresh && this.scroll.refresh();
     },
   },
 };

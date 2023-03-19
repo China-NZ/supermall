@@ -5,7 +5,11 @@
         <template #slide>
           <a :href="item.link">
             <!-- <img :src="item.link" alt="轮播图图片"> -->
-            <img src="~@/assets/images/common/back.svg" alt="" />
+            <img
+              src="~@/assets/images/common/back.svg"
+              alt=""
+              @load="homeSwiperImg"
+            />
           </a>
         </template>
       </swiper-item>
@@ -20,18 +24,32 @@ import SwiperItem from 'components/common/swiper/SwiperItem' */
 import { Swiper, SwiperItem } from "components/common/swiper";
 export default {
   name: "HomeSwiper",
-  props:{
-    banner:{
-      type:Array,
-      default(){
-        return []
-      }
+  data() {
+    return {
+      isLoad:false
     }
   },
-  components:{
+  props: {
+    banner: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+  },
+  components: {
     Swiper,
-    SwiperItem 
-  }
+    SwiperItem,
+  },
+  methods: {
+    // 通过@load 监听轮播图图片
+    homeSwiperImg() {
+      if(!this.isLoad){ // 发出去一次之后，不需要后续在继续发送了
+        this.$emit('homeSwiperImg')
+        this.isLoad=true
+      }
+    },
+  },
 };
 </script>
 <style scoped>
