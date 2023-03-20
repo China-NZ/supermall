@@ -23,7 +23,7 @@ export default {
         //轮播图滚动动画时间
         animDuration: {
             type: Number,
-            default: 300,
+            default: 500,
         },
         // 滑动比例
         moveRatio: {

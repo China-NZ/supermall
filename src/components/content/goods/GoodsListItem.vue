@@ -1,7 +1,7 @@
 <template>
   <div class="goods-list-item">
     <!-- 通过父传子方法从上一级组件哪里获取到详细的商品数据 -->
-    <img src="goodslistitem.show.img" alt="商品图片" @load="imageLoad" />
+    <img src="goodslistitem.show.img" alt="商品图片" @load="imageLoad" @click="itemClick"/>
     <div class="goods-info">
       <p>{{ goodslistitem.title }}</p>
       <span class="price">{{ goodslistitem.price }}</span>
@@ -27,6 +27,11 @@ export default {
       console.log(this.$bus);
       this.$bus.$emit('itemImageLoad')
     },
+    itemClick(){
+      // console.log('跳转到详情页');
+      // 动态路由传递参数 this.goodslistitem.iid对应路由中的id
+      this.$router.push('/detail'+ this.goodslistitem.id)
+    }
   },
 };
 </script>

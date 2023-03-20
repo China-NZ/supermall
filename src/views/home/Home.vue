@@ -178,6 +178,7 @@ export default {
       isShow: false,
       tabOffsetTop:0,
       i:false,
+      saveY:0,
     };
   },
   components: {
@@ -199,13 +200,31 @@ export default {
     this.getHomeGoods("news");
     this.getHomeGoods("sell");
   },
+  // 生命周期 销毁
+  destroyed() {
+    console.log('home destroyed');
+  },
+  // 活跃
+  activated() {
+    this.$refs.bscroll.scrollTo(0,this.saveY,0)
+    // 重新计算位置
+    this.$refs.bscroll.refresh()
+  },
+  // 不活跃
+  deactivated() {
+    // 方法一
+    /* this.saveY=this.$refs.bscroll.scroll.y */
+    // 方法二 在封装的BScroll插件中 封装成一个函数 ，用来调用
+    this.saveY=this.$refs.bscroll.getScrollY()
+    console.log(this.saveY);
+  },
   mounted() {
     // 3.监听GoodsListItem组件中的item中图片加载完成
     // 4.刷新频繁的防抖函数处理
     const refresh = debounce(this.$refs.bscroll.refresh, 50);
     this.$bus.$on("itemImageLoad", () => {
-      // this.$refs.bscroll.refresh();
-      refresh();
+      // this.$refs.bscroll.refresh()
+      refresh()
     });
   },
   computed: {
@@ -250,7 +269,7 @@ export default {
       this.$refs.tabControl2.currentIndex=index
     },
     backClick() {
-      console.log(this.$refs.bscroll);
+      console.log(this.$refs.bscroll)
       // scrollTo(X坐标,y坐标,等待时间)
       // this.$refs.bscroll.scroll.scrollTo(0,0,1000)
       this.$refs.bscroll.scrollTo(0, 0);
