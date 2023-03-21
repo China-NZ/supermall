@@ -84,7 +84,8 @@ export default {
     },
     // 获取首页Y值，以便Home页面调用
     getScrollY(){
-      return this.scroll?this.scroll.y:0
+      // return this.scroll?this.scroll.y:0
+      return this.scroll || this.scroll.y || 0
     }
   },
 };

@@ -4,7 +4,7 @@
       <swiper-item v-for="(item, index) in banner" :key="index">
         <template #slide>
           <a :href="item.link">
-            <!-- <img :src="item.link" alt="轮播图图片"> -->
+            <!-- <img :src="item.link" alt="轮播图图片"> @load vue中监听图片的方法 -->
             <img
               src="~@/assets/images/common/back.svg"
               alt=""

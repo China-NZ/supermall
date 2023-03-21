@@ -9,6 +9,11 @@ export function getDetail(id){
     }
   })
 }
+export function getRecommend(){
+  return request1({
+    url:'/recommend'
+  })
+}
 // 创建一个类 把接口中的属性抽取出来，统一到这个类中，以便详情页去调用
 export class Goods {
   constructor(itemInfo, columns, services) {

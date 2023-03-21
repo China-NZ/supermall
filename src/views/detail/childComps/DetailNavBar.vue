@@ -10,7 +10,7 @@
       </template>
       <template #center>
         <div class="titles">
-          <!-- 导航内容 -->
+          <!-- 导航栏内容 -->
           <div
             v-for="(item, index) in titles"
             :key="index"
@@ -51,16 +51,16 @@ export default {
 </script>
 <style scoped>
 .titles {
-  position: fixed;
+  display: flex;
   font-size: 16px;
 }
 .title-item {
   flex: 1;
 }
 .active {
-  color: pik;
+  color: red;
 }
 .back img{
-  margin-top: 20px;
+  margin-top: 10px;
 }
 </style>

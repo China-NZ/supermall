@@ -157,10 +157,12 @@ import RecommendView from "./childComps/RecommendView";
 import FeatureView from "./childComps/FeatureView";
 // 导入的函数方法
 import { getHomeMultidata, getHomeGoods } from "network/home";
-import { debounce } from "common/utils";
+// import { debounce } from "common/utils";
+import {itemListenerMixin} from 'common/mixin'
 
 export default {
   name: "Home",
+  mixins:[itemListenerMixin],
   data() {
     return {
       banner: [],
@@ -204,28 +206,34 @@ export default {
   destroyed() {
     console.log('home destroyed');
   },
-  // 活跃
+  // 活跃 设置位置
   activated() {
     this.$refs.bscroll.scrollTo(0,this.saveY,0)
     // 重新计算位置
     this.$refs.bscroll.refresh()
   },
-  // 不活跃
+  // 不活跃 记录位置
   deactivated() {
-    // 方法一
+    // 方法一 1.保存Y值
     /* this.saveY=this.$refs.bscroll.scroll.y */
-    // 方法二 在封装的BScroll插件中 封装成一个函数 ，用来调用
+    // 方法二 1.保存Y值 在封装的BScroll插件中 封装成一个函数 ，用来调用
     this.saveY=this.$refs.bscroll.getScrollY()
-    console.log(this.saveY);
+    // console.log(this.saveY)
+    // 2. 取消全局事件的监听
+    // this.$bus.$off('itemImageLoad',你监听的函数)
+    this.$bus.$off('itemImageLoad',this.itemImgListener)
   },
+  // mixins混入的使用，不需要生命周期函数进行使用
   mounted() {
     // 3.监听GoodsListItem组件中的item中图片加载完成
     // 4.刷新频繁的防抖函数处理
-    const refresh = debounce(this.$refs.bscroll.refresh, 50);
-    this.$bus.$on("itemImageLoad", () => {
+   /*  const refresh = debounce(this.$refs.bscroll.refresh, 50);
+    // 对监听的世界进行保存
+    this.itemImgListener = () => {
       // this.$refs.bscroll.refresh()
       refresh()
-    });
+    }
+    this.$bus.$on("itemImageLoad",this.itemImgListener); */
   },
   computed: {
     showGoods() {

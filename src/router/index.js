@@ -34,8 +34,10 @@ const routes =[ // 配置路由映射
     component:Cart
   },
   {
-    // 动态路由传递参数
-    path:'/detail:id',
+    // 方法一 动态路由传递参数
+    // path:'/detail/:id',
+    // 方法二： 
+    path:'/detail',
     component:Detail
   }
 ]

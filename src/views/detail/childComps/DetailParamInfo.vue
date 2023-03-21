@@ -1,5 +1,5 @@
 <template>
-  <div class="param-info" v-if="Object.keys(paramInfo).length">
+  <div class="param-info" v-if="Object.keys(paramInfo).length!==0">
     <div class="rules">
       <table v-if="paramInfo.rule && paramInfo.rule.tables.length">
         <tr v-for="(itemtr,indextr) in paramInfo.rule.tables[0]" :key="indextr">
