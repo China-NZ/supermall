@@ -150,7 +150,7 @@ import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import BScroll from "components/common/bscroll/BScroll";
-import BackTop from "components/content/backTop/BackTop";
+// import BackTop from "components/content/backTop/BackTop";
 // 页面组件
 import HomeSwiper from "./childComps/HomeSwiper";
 import RecommendView from "./childComps/RecommendView";
@@ -158,11 +158,11 @@ import FeatureView from "./childComps/FeatureView";
 // 导入的函数方法
 import { getHomeMultidata, getHomeGoods } from "network/home";
 // import { debounce } from "common/utils";
-import {itemListenerMixin} from 'common/mixin'
+import {itemListenerMixin,backTopMixin} from 'common/mixin'
 
 export default {
   name: "Home",
-  mixins:[itemListenerMixin],
+  mixins:[itemListenerMixin,backTopMixin],
   data() {
     return {
       banner: [],
@@ -177,7 +177,6 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: "pop",
-      isShow: false,
       tabOffsetTop:0,
       i:false,
       saveY:0,
@@ -191,7 +190,7 @@ export default {
     HomeSwiper,
     RecommendView,
     FeatureView,
-    BackTop,
+
   },
   // 网络请求获取的数据 生命周期
   created() {
@@ -273,14 +272,9 @@ export default {
           break;
       }
       // console.log(this.$refs.tabControl1.currentIndex);
+      // 让两个TabcControl的currentIndex保持一致
       this.$refs.tabControl1.currentIndex=index
       this.$refs.tabControl2.currentIndex=index
-    },
-    backClick() {
-      console.log(this.$refs.bscroll)
-      // scrollTo(X坐标,y坐标,等待时间)
-      // this.$refs.bscroll.scroll.scrollTo(0,0,1000)
-      this.$refs.bscroll.scrollTo(0, 0);
     },
     homeSwiperImg() {
       // 5.获取tabControl的offsetTop
@@ -290,8 +284,9 @@ export default {
     },
     //从BScroll组件中传递过来的坐标
     contentScroll(position) {
-      // console.log(position);
+      // 是否显示回到顶部 不能抽取到mixin中，除非把这个封装为一个函数，在这里面调用，把函数抽取进去
       this.isShow = -position.y > 1000;
+      // this.listenShowBackTop(position)
 
       this.i =(-position.y)>this.tabOffsetTop
     },

@@ -41,6 +41,8 @@ export default {
   methods: {
     indexClick(index) {
       this.currIndex = index;
+      // 详情页头部发送给Detail组件
+      this.$emit('indexClick',index)
     },
     backClick(){
       // 返回上一层级

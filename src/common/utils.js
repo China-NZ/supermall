@@ -1,4 +1,5 @@
-export function debounce(func, delay) { // 防抖函数 传入两个参数
+// ES6语法当中，参数可以加入默认值，使其他调用者，可以不需要填写
+export function debounce(func, delay=200) { // 防抖函数 传入两个参数
   let timer = null
   return function (...args) {
     // 结束定时器操作
