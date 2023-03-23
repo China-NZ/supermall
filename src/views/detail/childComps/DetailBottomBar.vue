@@ -24,7 +24,13 @@
 </template>
 <script>
   export default {
-    name: 'DetailBottomBar'
+    name: 'DetailBottomBar',
+    methods: {
+      addToCart(){
+        // console.log('点击添加到购物车中');
+        this.$emit('addToCart')
+      }
+    },
   };
 </script>
 <style scoped>

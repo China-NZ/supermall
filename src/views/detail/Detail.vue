@@ -19,7 +19,7 @@
       <goods-list ref="recommend" :goodslist="recommends" />
     </b-scroll>
     <!-- 底部工具栏 -->
-    <detail-bottom-bar/>
+    <detail-bottom-bar @addToCart='addToCart'/>
     <!-- 返回顶部按钮 -->
     <back-top @click.native="backClick" v-show="isShow" />
   </div>
@@ -217,6 +217,19 @@ export default {
       this.isShow = -position.y > 1000;
       // this.listenShowBackTop(position)
     },
+    addToCart(){
+      // 1.获取购物车需要展示的信息
+      const product = {}
+      product.image = this.topImages[0]
+      product.title = this.goods.title
+      product.desc = this.goods.desc
+      product.price = this.goods.realPrice
+      product.iid = this.id
+
+      // 2.将商品添加到购物车里
+      // this.$store.cartList.push(product)
+      this.$store.commit('addCart',product)
+    },
   },
 };
 </script>
@@ -224,7 +237,7 @@ export default {
 #detail {
   position: relative;
   z-index: 99;
-  background-color: rgb(110, 110, 110);
+  /* background-color: rgb(110, 110, 110); */
   height: 100vh;
 }
 .detail-nav {
