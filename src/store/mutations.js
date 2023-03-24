@@ -26,6 +26,8 @@ export default {
     payload.count++
   },
   [ADD_TO_CART](state,payload){
+    // 在vuex中添加新属性为true，默认选中
+    payload.checked=true
     state.cartList.push(payload)
   }
 }

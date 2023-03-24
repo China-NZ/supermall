@@ -39,6 +39,8 @@ import {
 import { debounce } from "common/utils";
 import { itemListenerMixin,backTopMixin } from "common/mixin";
 /* import BackTop from "components/content/backTop/BackTop"; */
+// 把vuex里面的方法映射到其他组件当中，以便其他组件使用
+import {mapActions} from 'vuex'
 
 import DetailNavBar from "./childComps/DetailNavBar";
 import DetailSwiper from "./childComps/DetailSwiper";
@@ -183,6 +185,7 @@ export default {
     this.$bus.$off("itemImageLoad", this.itemImgListener);
   },
   methods: {
+    ...mapActions(['addCart']),
     InfoImgLoad() {
       // 图片加载完成之后，重新计算高度，防止出现图片加载完成，导致的高度问题
       this.$refs.bscroll.refresh();
@@ -226,9 +229,19 @@ export default {
       product.price = this.goods.realPrice
       product.iid = this.id
 
-      // 2.将商品添加到购物车里
+      // 2.将商品添加到购物车里(1.promise 2.mapActions)
       // this.$store.cartList.push(product)
-      this.$store.commit('addCart',product)
+      // this.$store.commit('addCart',product)
+      // 方法一
+      this.$store.dispatch('addCart',product).then(res=>{
+        console.log(res);
+      })
+      // 方法二 使用映射过来的方法 这种代码要看得懂，会用更好
+      /* this.addCart(product).then(res=>{
+        console.log(res);
+      }) */
+
+      // 3.添加到购物车成功弹框 要写到vuex里面
     },
   },
 };

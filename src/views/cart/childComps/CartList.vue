@@ -1,6 +1,6 @@
 <template>
   <div class="cart-list">
-    <b-scroll class="content">
+    <b-scroll class="content" ref="BScroll">
       <template #wrapper>
         <li>内容1</li>
         <li>内容2</li>
@@ -52,7 +52,7 @@
         <li>内容48</li>
         <li>内容49</li>
         <li>内容50</li>
-        <cart-list-item v-for="(item,index) in cartList" :key="index" :cart-list-item='item'/>
+        <cart-list-item v-for="(item,index) in cartList" :key="index" :list-item='item'/>
       </template>
     </b-scroll>
   </div>
@@ -70,11 +70,14 @@ export default {
   computed: {
     ...mapGetters(["cartList"]),
   },
+  activated() {
+    this.$refs.BScroll.refresh()
+  },
 };
 </script>
 <style scoped>
 .cart-list {
-  height: calc(100% - 44px - 49px);
+  height: calc(100% - 44px - 49px - 40px);
   /* height: 100vh; */
 }
 .content {
