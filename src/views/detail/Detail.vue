@@ -22,12 +22,15 @@
     <detail-bottom-bar @addToCart='addToCart'/>
     <!-- 返回顶部按钮 -->
     <back-top @click.native="backClick" v-show="isShow" />
+    <!-- 弹框显示 -->
+    <!-- <toast :toast-message="toastMessage" :toast-show='toastShow'/> -->
   </div>
 </template>
 <script>
 import BScroll from "components/common/bscroll/BScroll";
 // 导入这个组件，复用这个组件，显示推荐数据展示
-import GoodsList from "components/content/goods/GoodsList";
+import GoodsList from "components/content/goods/GoodsList"
+// import Toast from 'components/common/toast/Toast'
 
 import {
   getDetail,
@@ -64,6 +67,7 @@ export default {
     DetailBottomBar,
     BScroll,
     GoodsList,
+    // Toast,
     
   },
   // 混入对象的数组功能使用
@@ -81,7 +85,8 @@ export default {
       themeTopYs: [],
       getthemTopY: null,
       contentIndex:0,
-      
+      // toastMessage:'',
+      // toastShow:false
     };
   },
   created() {
@@ -216,8 +221,8 @@ export default {
           this.$refs.navbar.currIndex=this.contentIndex
         } */
       }
-      // 是否显示回到顶部 不能抽取到mixin中，除非把这个封装为一个函数，在这里面调用，把函数抽取进去
-      this.isShow = -position.y > 1000;
+      // 3.是否显示回到顶部 不能抽取到mixin中，除非把这个封装为一个函数，在这里面调用，把函数抽取进去
+      this.isShow = -position.y > 200;
       // this.listenShowBackTop(position)
     },
     addToCart(){
@@ -234,7 +239,14 @@ export default {
       // this.$store.commit('addCart',product)
       // 方法一
       this.$store.dispatch('addCart',product).then(res=>{
-        console.log(res);
+       /*  this.toastShow = true
+        this.toastMessage = res
+        setTimeout(()=>{
+          this.toastShow=false
+          this.toastMessage = ''
+        },2000) */
+        // 使用封装好的方法，直接输入参数，调用,不输入，即使用默认的参数值
+        this.$toast.show(res,2000)
       })
       // 方法二 使用映射过来的方法 这种代码要看得懂，会用更好
       /* this.addCart(product).then(res=>{

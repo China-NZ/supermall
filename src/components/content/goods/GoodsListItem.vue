@@ -1,8 +1,8 @@
 <template>
   <div class="goods-list-item">
-    <!-- 通过父传子方法从上一级组件哪里获取到详细的商品数据 -->
+    <!-- 通过父传子方法从上一级组件哪里获取到详细的商品数据 不使用图片懒加载：:src="showImages" -->
     <img
-      :src="showImages"
+      v-lazy='showImages'
       alt="商品图片"
       @load="imageLoad"
       @click="itemClick"
